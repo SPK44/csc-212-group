@@ -1,4 +1,5 @@
 #include "KDTree.h"
+#include <iostream>
 #include <math.h>
 
 
@@ -82,7 +83,7 @@ void KDTree::insert(double lat, double lon, const char *desc) {
 
 void KDTree::printNode(KDNode *p){
 	
-	std::cout << "\t[\"" << p->name << "\", " << p->lat << ", " << p->lon << "],\n";
+	std::cout << "\t[\"" << p->description << "\", " << p->latitude << ", " << p->longitude << "],\n";
 	
 }
 
@@ -90,22 +91,22 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 	unsigned int count = 0;
 	if(!(p->depth % 2)){
 		
-		if( p->lattitude > lat + rad){
+		if( p->latitude > lat + rad){
 		
-			count += printNeightborsHelp(lat, lon, rad, filter, p->left);
-		
-		}
-		else if( p->lattitude > lat - rad){
-		
-			count += printNeightborsHelp(lat, lon, rad, filter, p->right);
+			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
 		
 		}
-		else if(p.distance(lat, lon) <= rad){
+		else if( p->latitude > lat - rad){
+		
+			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
+		
+		}
+		else if(p->distance(lat, lon) <= rad){
 			
 			printNode(p);
 			count++;
-			count += printNeightborsHelp(lat, lon, rad, filter, p->right);
-			count += printNeightborsHelp(lat, lon, rad, filter, p->left);
+			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
+			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
 		}
 	
 	}
@@ -113,20 +114,20 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 		
 		if(p->longitude > lon + rad){
 			
-			count += printNeightborsHelp(lat, lon, rad, filter, p->left); 
+			count += printNeighborsHelp(lat, lon, rad, filter, p->left); 
 			
 		}
 		else if( p->longitude > lon - rad){
 		
-			count += printNeightborsHelp(lat, lon, rad, filter, p->right);
+			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
 		
 		}
-		else if(p.distance(lat, lon) <= rad){
+		else if(p->distance(lat, lon) <= rad){
 			
 			printNode(p);
 			count++;
-			count += printNeightborsHelp(lat, lon, rad, filter, p->right);
-			count += printNeightborsHelp(lat, lon, rad, filter, p->left);
+			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
+			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
 		}
 	
 	}
@@ -137,8 +138,8 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 unsigned int KDTree::printNeighbors(double lat, double lon, double rad, const char *filter) {
 	
 	KDNode *p = root;
-	std::cout << "\t[\"" << "CENTER" << "\", " << la << ", " << lo << "],\n";
-	unsigned int count = printNeightborsHelp(lat, lon, rad, filter, p);
+	std::cout << "\t[\"" << "CENTER" << "\", " << lat << ", " << lon << "],\n";
+	unsigned int count = printNeighborsHelp(lat, lon, rad, filter, p);
 	std::cout << "];\n";
 	
 	return count;

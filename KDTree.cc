@@ -140,7 +140,7 @@ ul_int KDTree::printNeighbors(double lat, double lon, double rad, const char *fi
 	KDNode *p = root;
 	std::cout << "\t[\"" << "CENTER" << "\", " << la << ", " << lo << "],\n";
 	ul_int count = printNeightborsHelp(lat, lon, rad, filter, p);
-	std::cout << "];\n"
+	std::cout << "];\n";
 	
 	return count;
 }

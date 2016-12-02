@@ -1,6 +1,7 @@
 #include "KDTree.h"
 #include <math.h>
 
+typedef unsigned int ul_int;
 
 KDNode::KDNode(double lat, double lon, const char *desc) {
 	left = NULL;
@@ -80,9 +81,68 @@ void KDTree::insert(double lat, double lon, const char *desc) {
 	insertHelper(root, root, 1, lat, lon, desc);
 }
 
-unsigned int KDTree::printNeighbors(double lat, double lon, double rad, const char *filter) {
-	// TODO
-	return -1;
+void KDTree::printNode(KDNode *p){
+	
+	std::cout << "\t[\"" << p->name << "\", " << p->lat << ", " << p->lon << "],\n";
+	
+}
+
+ul_int KDTree::printNeighborsHelp(double lat, double lon, double rad, const char *filter, KDNode *p){
+	ul_int count = 0;
+	if(!(p->depth % 2)){
+		
+		if( p->lattitude > lat + rad){
+		
+			count += printNeightborsHelp(lat, lon, rad, filter, p->left);
+		
+		}
+		else if( p->lattitude > lat - rad){
+		
+			count += printNeightborsHelp(lat, lon, rad, filter, p->right);
+		
+		}
+		else if(p.distance(lat, lon) <= rad){
+			
+			printNode(p);
+			count++;
+			count += printNeightborsHelp(lat, lon, rad, filter, p->right);
+			count += printNeightborsHelp(lat, lon, rad, filter, p->left);
+		}
+	
+	}
+	else{
+		
+		if(p->longitude > lon + rad){
+			
+			count += printNeightborsHelp(lat, lon, rad, filter, p->left); 
+			
+		}
+		else if( p->longitude > lon - rad){
+		
+			count += printNeightborsHelp(lat, lon, rad, filter, p->right);
+		
+		}
+		else if(p.distance(lat, lon) <= rad){
+			
+			printNode(p);
+			count++;
+			count += printNeightborsHelp(lat, lon, rad, filter, p->right);
+			count += printNeightborsHelp(lat, lon, rad, filter, p->left);
+		}
+	
+	}
+	
+	return count;
+}
+
+ul_int KDTree::printNeighbors(double lat, double lon, double rad, const char *filter) {
+	
+	KDNode *p = root;
+	std::cout << "\t[\"" << "CENTER" << "\", " << la << ", " << lo << "],\n";
+	ul_int count = printNeightborsHelp(lat, lon, rad, filter, p);
+	std::cout << "];\n"
+	
+	return count;
 }
 
 unsigned int KDTree::getSize() {

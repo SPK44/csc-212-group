@@ -51,12 +51,14 @@ void KDTree::insertHelper(KDNode *p, KDNode *parent, int depth, double lat, doub
 	
 	if (!p) {
 		KDNode *node = new KDNode(lat, lon, desc);
-		if (p == parent)
+		if (p == parent){
 			root = node;
 			node->depth = 0;
-		else
+		}
+		else {
 			(parent->left == p) ? parent->left = node : parent->right = node;
 			node->depth = depth;
+		}
 		return;
 	}
 	if (depth % 2) {

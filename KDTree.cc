@@ -63,22 +63,22 @@ void KDTree::insertHelper(KDNode *p, KDNode *parent, int depth, double lat, doub
 		return;
 	}
 	if (depth % 2) {
-		if (p->latitude >= lat)
-			insertHelper(p->right,p, depth + 1, lat, lon, desc);
-		if (p->latitude <= lat)
-			insertHelper(p->left,p, depth + 1, lat, lon, desc);
+		if (lat >= p->latitude)
+			insertHelper(p->right, p, depth + 1, lat, lon, desc);
+		if (lat <= p->latitude)
+			insertHelper(p->left, p, depth + 1, lat, lon, desc);
 	}
 	else {	
-		if (p->longitude >= lon)
+		if (lon >= p->longitude)
 			insertHelper(p->right, p, depth + 1, lat, lon, desc);
-		if (p->longitude <= lon)
+		if (lon >= p->longitude)
 			insertHelper(p->left, p, depth + 1, lat, lon, desc);
 	}
 
 }
 
 void KDTree::insert(double lat, double lon, const char *desc) {
-	insertHelper(root, root, 1, lat, lon, desc);
+	insertHelper(root, root, 0, lat, lon, desc);
 }
 
 void KDTree::printNode(KDNode *p){

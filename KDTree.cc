@@ -1,7 +1,6 @@
 #include "KDTree.h"
 #include <math.h>
 
-typedef unsigned int ul_int;
 
 KDNode::KDNode(double lat, double lon, const char *desc) {
 	left = NULL;
@@ -87,8 +86,8 @@ void KDTree::printNode(KDNode *p){
 	
 }
 
-ul_int KDTree::printNeighborsHelp(double lat, double lon, double rad, const char *filter, KDNode *p){
-	ul_int count = 0;
+unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, const char *filter, KDNode *p){
+	unsigned int count = 0;
 	if(!(p->depth % 2)){
 		
 		if( p->lattitude > lat + rad){
@@ -135,11 +134,11 @@ ul_int KDTree::printNeighborsHelp(double lat, double lon, double rad, const char
 	return count;
 }
 
-ul_int KDTree::printNeighbors(double lat, double lon, double rad, const char *filter) {
+unsigned int KDTree::printNeighbors(double lat, double lon, double rad, const char *filter) {
 	
 	KDNode *p = root;
 	std::cout << "\t[\"" << "CENTER" << "\", " << la << ", " << lo << "],\n";
-	ul_int count = printNeightborsHelp(lat, lon, rad, filter, p);
+	unsigned int count = printNeightborsHelp(lat, lon, rad, filter, p);
 	std::cout << "];\n";
 	
 	return count;

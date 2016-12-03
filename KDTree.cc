@@ -60,18 +60,19 @@ void KDTree::insertHelper(KDNode *p, KDNode *parent, int depth, double lat, doub
 			(parent->left == p) ? parent->left = node : parent->right = node;
 			node->depth = depth;
 		}
+		size++;
 		return;
 	}
 	if (depth % 2) {
 		if (lat >= p->latitude)
 			insertHelper(p->right, p, depth + 1, lat, lon, desc);
-		if (lat <= p->latitude)
+		if (lat < p->latitude)
 			insertHelper(p->left, p, depth + 1, lat, lon, desc);
 	}
 	else {	
 		if (lon >= p->longitude)
 			insertHelper(p->right, p, depth + 1, lat, lon, desc);
-		if (lon >= p->longitude)
+		if (lon < p->longitude)
 			insertHelper(p->left, p, depth + 1, lat, lon, desc);
 	}
 

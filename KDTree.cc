@@ -48,99 +48,89 @@ void KDTree::destroy(KDNode *p) {
 	root = NULL;
 }
 
-void KDTree::insertHelper(KDNode *p, KDNode *parent, int depth, double lat, double lon, const char *desc) {
-	
-	if (!p) {
-		KDNode *node = new KDNode(lat, lon, desc);
-		if (p == parent){
-			root = node;
-			node->depth = 0;
-		}
-		else {
-			(parent->left == p) ? parent->left = node : parent->right = node;
-			node->depth = depth;
-		}
-		size++;
-		return;
-	}
-	if (depth % 2) {
-		if (lat >= p->latitude)
-			insertHelper(p->right, p, depth + 1, lat, lon, desc);
-		if (lat < p->latitude)
-			insertHelper(p->left, p, depth + 1, lat, lon, desc);
-	}
-	else {	
-		if (lon >= p->longitude)
-			insertHelper(p->right, p, depth + 1, lat, lon, desc);
-		if (lon < p->longitude)
-			insertHelper(p->left, p, depth + 1, lat, lon, desc);
-	}
-
-}
 
 void KDTree::insert(double lat, double lon, const char *desc) {
-	insertHelper(root, root, 0, lat, lon, desc);
+	
+	KDNode * p = root;
+	KDNode * parent = root;
+	int depth = 0;
+
+	while(1) {
+		if (!p) {
+			KDNode *node = new KDNode(lat, lon, desc);
+			if (p == parent){
+				root = node;
+				node->depth = 0;
+			}
+			else {
+				(parent->left == p) ? parent->left = node : parent->right = node;
+				node->depth = depth;
+			}
+			size++;
+			return;
+		}
+		parent = p;
+		if (depth % 2) {
+			if (lat < p->latitude)
+				p = p->left;
+			else
+				p = p->right;
+		}
+		else {	
+			if (lon < p->longitude)
+				p = p->left;
+			else
+				p = p->right;
+		}
+		depth++;
+	}
 }
 
-void KDTree::printNode(KDNode *p){
-	
-	std::cout << "\t[\"" << p->description << "\", " << p->latitude << ", " << p->longitude << "],\n";
-	
+
+
+unsigned int KDTree::printHelper(KDNode * p, double * latMax, double * latMin, double * lonMax, double * lonMin, double * lat, double * lon, double  * rad, const char *filter) {
+
+		if (!p)
+			return 0;
+			
+		int count = 0;
+
+
+		if (p->distance(*(lat), *(lon)) < *(rad) && p->description.find(filter) != std::string::npos) {
+			std::cout << "\t[\"" << p->description << "\", " << p->latitude << ", " << p->longitude << "],\n";
+			count++;
+		}
+
+
+		if (p->depth % 2) {
+			if (p->latitude <= *(latMax))
+				count += printHelper(p->right, latMax, latMin, lonMax, lonMin, lat, lon, rad, filter);
+			if (p->latitude >= *(latMin))
+				count += printHelper(p->left, latMax, latMin, lonMax, lonMin, lat, lon, rad, filter);
+		}
+		else {	
+			if (p->longitude <= *(lonMax))
+				count += printHelper(p->right, latMax, latMin, lonMax, lonMin, lat, lon, rad, filter);
+			if (p->longitude >= *(lonMin))
+				count += printHelper(p->left, latMax, latMin, lonMax, lonMin, lat, lon, rad, filter);
+		}
+
+		return count;
 }
 
-unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, const char *filter, KDNode *p){
-	unsigned int count = 0;
-	if(!(p->depth % 2)){
-		
-		if( p->latitude > lat + rad){
-		
-			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
-		
-		}
-		else if( p->latitude > lat - rad){
-		
-			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
-		
-		}
-		else if(p->distance(lat, lon) <= rad){
-			
-			printNode(p);
-			count++;
-			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
-			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
-		}
-	
-	}
-	else{
-		
-		if(p->longitude > lon + rad){
-			
-			count += printNeighborsHelp(lat, lon, rad, filter, p->left); 
-			
-		}
-		else if( p->longitude > lon - rad){
-		
-			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
-		
-		}
-		else if(p->distance(lat, lon) <= rad){
-			
-			printNode(p);
-			count++;
-			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
-			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
-		}
-	
-	}
-	
-	return count;
-}
 
 unsigned int KDTree::printNeighbors(double lat, double lon, double rad, const char *filter) {
 	
-	KDNode *p = root;
 	std::cout << "\t[\"" << "CENTER" << "\", " << lat << ", " << lon << "],\n";
-	unsigned int count = printNeighborsHelp(lat, lon, rad, filter, p);
+	
+	double latMax = lat + rad;
+	double latMin = lat - rad;
+	double lonMax = lon + rad;
+	double lonMin = lon - rad;
+	int count = 0;
+
+	count += printHelper(root, &latMax, &latMin, &lonMax, &lonMin, &lat, &lon, &rad, filter);
+
 	std::cout << "];\n";
 	
 	return count;

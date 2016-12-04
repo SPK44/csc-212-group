@@ -11,8 +11,6 @@ class KDNode {
 	    KDNode *right;
 	    int depth;
 
-	    // this function returs the distance in miles from lat, lon
-	    // to this object
 	    double distance(double lat, double lon);
 
 	public:

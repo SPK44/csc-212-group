@@ -103,15 +103,19 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
 		
 		}
-		else if( p->latitude > lat - rad/69.172){
+		else if( p->latitude < lat - rad/69.172){
 		
 			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
 		
 		}
 		else if(p->distance(lat, lon) <= rad){
 			
-			printNode(p);
-			count++;
+			if(p->desc.find(filter) != std::string::npos){
+				
+				printNode(p);
+				count++;
+			
+			}
 			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
 			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
 		}
@@ -130,15 +134,19 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 			count += printNeighborsHelp(lat, lon, rad, filter, p->left); 
 			
 		}
-		else if( p->longitude > lon - rad*cos(param*lat)){
+		else if( p->longitude < lon - rad*cos(param*lat)){
 		
 			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
 		
 		}
 		else if(p->distance(lat, lon) <= rad){
 			
-			printNode(p);
-			count++;
+			if(filter == p->desc){
+				
+				printNode(p);
+				count++;
+			
+			}
 			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
 			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
 		}

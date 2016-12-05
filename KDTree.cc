@@ -90,7 +90,12 @@ void KDTree::printNode(KDNode *p){
 
 unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, const char *filter, KDNode *p){
 	unsigned int count = 0;
-	if(!(p->depth % 2)){
+	if(!p){ 
+	
+	return count;
+	
+	}
+	else if(!(p->depth % 2)){
 		
 		if( p->latitude > lat + rad){
 		
@@ -108,6 +113,12 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 			count++;
 			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
 			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
+		}
+		else{
+		
+			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
+			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
+			
 		}
 	
 	}
@@ -129,6 +140,12 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 			count++;
 			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
 			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
+		}
+		else{
+			
+			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
+			count += printNeighborsHelp(lat, lon, rad, filter, p->left);	
+			
 		}
 	
 	}

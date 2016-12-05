@@ -110,7 +110,7 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 		}
 		else if(p->distance(lat, lon) <= rad){
 			
-			if(p->desc.find(filter) != std::string::npos){
+			if(p->description.find(filter) != std::string::npos){
 				
 				printNode(p);
 				count++;
@@ -141,7 +141,7 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 		}
 		else if(p->distance(lat, lon) <= rad){
 			
-			if(filter == p->desc){
+			if(p->description.find(filter) != std::string::npos){
 				
 				printNode(p);
 				count++;

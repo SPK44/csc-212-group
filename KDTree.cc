@@ -1,4 +1,4 @@
-]#include "KDTree.h"
+#include "KDTree.h"
 #include <iostream>
 #include <math.h>
 
@@ -142,10 +142,11 @@ unsigned int KDTree::printNeighbors(double lat, double lon, double rad, const ch
 	
 	std::cout << "\t[\"" << "CENTER" << "\", " << lat << ", " << lon << "],\n";
 	
-	double latMax = lat + rad;
-	double latMin = lat - rad;
-	double lonMax = lon + rad;
-	double lonMin = lon - rad;
+	double param = M_PI / 180.0; // required for conversion from degrees to radians
+	double latMax = lat + (rad/69.172);
+	double latMin = lat - (rad/69.172);
+	double lonMax = lon + rad*cos(param*lat);
+	double lonMin = lon - rad*cos(param*lat);
 	int count = 0;
 
 	// Recursive call to helper

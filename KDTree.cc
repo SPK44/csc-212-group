@@ -165,6 +165,7 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 unsigned int KDTree::printNeighbors(double lat, double lon, double rad, const char *filter) {
 	
 	KDNode *p = root;
+	std::cout << "var markers = [\n";	
 	std::cout << "\t[\"" << "CENTER" << "\", " << lat << ", " << lon << "],\n";
 	unsigned int count = printNeighborsHelp(lat, lon, rad, filter, p);
 	std::cout << "];\n";

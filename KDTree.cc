@@ -110,7 +110,7 @@ unsigned int KDTree::printHelper(KDNode * p, double * latMax, double * latMin, d
 		int count = 0;
 		
 		// Determines if the node is within the radius, and the filter word is in the description, then prints it if so
-		if (p->distance(*(lat), *(lon)) < *(rad) && p->description.find(filter) != std::string::npos) {
+		if (p->distance(*(lat), *(lon)) <= *(rad) && p->description.find(filter) != std::string::npos) {
 			std::string str = p->description;
 			str.erase(str.find_last_not_of(" \n\r\t")+1);
 			std::cout << "\t[\"" << str << "\", " << p->latitude << ", " << p->longitude << "],\n";

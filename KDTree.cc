@@ -148,6 +148,7 @@ unsigned int KDTree::printNeighbors(double lat, double lon, double rad, const ch
 	std::cout << "\t[\"" << "CENTER" << "\", " << lat << ", " << lon << "],\n";
 	
 	double param = M_PI / 180.0; // required for conversion from degrees to radians
+	// Converts from rad in miles to degrees, then adds or subtracts
 	double latMax = lat + (rad/69.172);
 	double latMin = lat - (rad/69.172);
 	double lonMax = lon + rad*cos(param*lat);

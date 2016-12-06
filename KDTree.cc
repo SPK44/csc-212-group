@@ -3,7 +3,6 @@
 #include <math.h>
 #include <string>
 
-//consturctor for KDNode
 KDNode::KDNode(double lat, double lon, const char *desc) {
 	left = NULL;
 	right = NULL;
@@ -12,7 +11,6 @@ KDNode::KDNode(double lat, double lon, const char *desc) {
 	longitude = lon;
 }
 
-//Deconstructor 
 KDNode::~KDNode() {
 }
 
@@ -36,6 +34,7 @@ KDTree::~KDTree() {
 	destroy(root);	
 }
 
+// Simple postorder traversal, deleting nodes along the way
 void KDTree::destroyHelper(KDNode *p) {
 	if (!p)
 		return;
@@ -45,6 +44,7 @@ void KDTree::destroyHelper(KDNode *p) {
 
 }
 
+// Calls helper function to purge data starting at a specific node
 void KDTree::destroy(KDNode *p) {
 	size = 0;
 	destroyHelper(root);
@@ -122,7 +122,7 @@ void KDTree::printNode(KDNode *p){
 //uses recursive calls to traverse tree and print out matches within radius and containing the keyword
 //returns number of hits
 unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, const char *filter, KDNode *p){
-	//initializes count variabel which holds number of hits
+	//initializes count variable which holds number of hits
 	unsigned int count = 0;
 	double param = M_PI / 180.0; // required for conversion from degrees to radians
 	//if KDNode pointer p points to a null
@@ -195,6 +195,7 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 	return count;
 }
 
+//prints formatting for center point and calls helper function on the root
 unsigned int KDTree::printNeighbors(double lat, double lon, double rad, const char *filter) {
 	
 	KDNode *p = root;
@@ -206,6 +207,7 @@ unsigned int KDTree::printNeighbors(double lat, double lon, double rad, const ch
 	return count;
 }
 
+//returns size of the KDTree
 unsigned int KDTree::getSize() {
 	return size;
 }

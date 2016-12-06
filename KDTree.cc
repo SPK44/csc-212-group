@@ -3,7 +3,7 @@
 #include <math.h>
 #include <string>
 
-
+//consturctor for KDNode
 KDNode::KDNode(double lat, double lon, const char *desc) {
 	left = NULL;
 	right = NULL;
@@ -12,8 +12,10 @@ KDNode::KDNode(double lat, double lon, const char *desc) {
 	longitude = lon;
 }
 
+//Deconstructor 
 KDNode::~KDNode() {
 }
+
 
 double KDNode::distance(double lat, double lon) {
 	double param = M_PI / 180.0; // required for conversion from degrees to radians
@@ -49,40 +51,65 @@ void KDTree::destroy(KDNode *p) {
 	root = NULL;
 }
 
+//helper function that is called by insert using two nodes, p and its parent, as well as a depth value
+//also calls itself recursively to traverse tree
 void KDTree::insertHelper(KDNode *p, KDNode *parent, int depth, double lat, double lon, const char *desc) {
 	
+	//if pointer points to a null
 	if (!p) {
+		//creates a new node with given lat, lon and desc
 		KDNode *node = new KDNode(lat, lon, desc);
+		//if p is at root
 		if (p == parent){
+			//points root to node
 			root = node;
+			//sets depth of node to zero
 			node->depth = 0;
 		}
 		else {
+			//based on what child of parent p is
+			//sets correct parent pointer to point to node
 			(parent->left == p) ? parent->left = node : parent->right = node;
+			//sets depth of node equal to deth value in recursive function
 			node->depth = depth;
 		}
+		//increases size of Tree
 		size++;
 		return;
 	}
+	//if depth is odd
 	if (depth % 2) {
+		//uses latitude to determine which way to recurse
+		//if inputted latitude is greater than or equal to latitude of p
 		if (lat >= p->latitude)
+			//calls itself recursively to the right
 			insertHelper(p->right, p, depth + 1, lat, lon, desc);
+		//if inputted latitude is less than latitude of p		
 		if (lat < p->latitude)
+			//calls itself recursively to the left			
 			insertHelper(p->left, p, depth + 1, lat, lon, desc);
 	}
-	else {	
+	//if depth is even
+	else {
+		//uses longitude to determine which way to recurse
+		//if inputted longitude is greater than or equal to longitude of p		
 		if (lon >= p->longitude)
+			//calls itself recursively to the right
 			insertHelper(p->right, p, depth + 1, lat, lon, desc);
+		//if inputted longitude is less than longitude of p		
 		if (lon < p->longitude)
+			//calls itself recursively to the left
 			insertHelper(p->left, p, depth + 1, lat, lon, desc);
 	}
 
 }
-
+// Function to insert into a kd tree given the latitude and longitude and a description
 void KDTree::insert(double lat, double lon, const char *desc) {
+	//calls helper function insertHelper
 	insertHelper(root, root, 0, lat, lon, desc);
 }
 
+//helper function for printNeighbors to print a node in the correct format
 void KDTree::printNode(KDNode *p){
 	std::string str = p->description;
 	str.erase(str.find_last_not_of(" \n\r\t")+1);
@@ -90,18 +117,28 @@ void KDTree::printNode(KDNode *p){
 	
 }
 
+//helper function for printNeighbors
+//takes inputs of latitude and longitude of center point, radius around point, filter keyword, and a node
+//uses recursive calls to traverse tree and print out matches within radius and containing the keyword
+//returns number of hits
 unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, const char *filter, KDNode *p){
+	//initializes count variabel which holds number of hits
 	unsigned int count = 0;
 	double param = M_PI / 180.0; // required for conversion from degrees to radians
+	//if KDNode pointer p points to a null
+	//returns 0 and goes back up tree
 	if(!p){ 
 	
 	return count;
 	
 	}
+	//if point p is less than radius distance from point (lat, lon)
+	//uses distance method that was provided
 	if(p->distance(lat, lon) <= rad){
-			
+		
+		//checks if filter keyword is in the description of the node
 		if(p->description.find(filter) != std::string::npos){
-				
+			//if so, prints node	
 			printNode(p);
 			count++;
 		

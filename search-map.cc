@@ -68,6 +68,7 @@ int main(int argc, char **args) {
                     line = line.substr(line.find_first_of(" ")+1);
                     lon = std::atof(line.substr(0,line.find_first_of(" ")).c_str());
                     name = line.substr(line.find_first_of(" ")+1);
+                    
                     // at this point you have LAT, LON, NAME
                     tree.insert(lat, lon, name.c_str());
                 } catch(const std::exception &e) {

@@ -1,7 +1,7 @@
 #include "KDTree.h"
 #include <iostream>
 #include <math.h>
-
+#include <string>
 
 KDNode::KDNode(double lat, double lon, const char *desc) {
 	left = NULL;
@@ -32,6 +32,8 @@ KDTree::KDTree() {
 KDTree::~KDTree() {
 	destroy(root);	
 }
+
+
 
 // Simple postorder traversal, deleting nodes along the way
 void KDTree::destroyHelper(KDNode *p) {
@@ -109,7 +111,9 @@ unsigned int KDTree::printHelper(KDNode * p, double * latMax, double * latMin, d
 		
 		// Determines if the node is within the radius, and the filter word is in the description, then prints it if so
 		if (p->distance(*(lat), *(lon)) < *(rad) && p->description.find(filter) != std::string::npos) {
-			std::cout << "\t[\"" << p->description << "\", " << p->latitude << ", " << p->longitude << "],\n";
+			std::string str = p->description;
+			str.erase(str.find_last_not_of(" \n\r\t")+1);
+			std::cout << "\t[\"" << str << "\", " << p->latitude << ", " << p->longitude << "],\n";
 			count++;
 		}
 

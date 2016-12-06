@@ -1,6 +1,7 @@
 #include "KDTree.h"
 #include <iostream>
 #include <math.h>
+#include <string>
 
 
 KDNode::KDNode(double lat, double lon, const char *desc) {
@@ -83,8 +84,9 @@ void KDTree::insert(double lat, double lon, const char *desc) {
 }
 
 void KDTree::printNode(KDNode *p){
+	std::string str = p->description;
 	str.erase(str.find_last_not_of(" \n\r\t")+1);
-	std::cout << "\t[\"" << p->description << "\", " << p->latitude << ", " << p->longitude << "],\n";
+	std::cout << "\t[\"" << str << "\", " << p->latitude << ", " << p->longitude << "],\n";
 	
 }
 

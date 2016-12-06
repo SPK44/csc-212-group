@@ -139,7 +139,8 @@ unsigned int KDTree::printHelper(KDNode * p, double * latMax, double * latMin, d
 
 // Function for formating the output, will also create pointers to the values of the boungding box
 unsigned int KDTree::printNeighbors(double lat, double lon, double rad, const char *filter) {
-	
+
+	std::cout << "var markers = [\n";	
 	std::cout << "\t[\"" << "CENTER" << "\", " << lat << ", " << lon << "],\n";
 	
 	double param = M_PI / 180.0; // required for conversion from degrees to radians

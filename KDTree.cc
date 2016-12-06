@@ -132,23 +132,6 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 	return count;
 	
 	}
-	//if point p is less than radius distance from point (lat, lon)
-	//uses distance method that was provied
-	if(p->distance(lat, lon) <= rad){
-		
-		//checks if filter keyword is in the description of the node
-		if(p->description.find(filter) != std::string::npos){
-			//if so, prints node	
-			printNode(p);
-			//increment the count
-			count++;
-		
-		}
-		//recurse down the tree
-		count += printNeighborsHelp(lat, lon, rad, filter, p->right);
-		//recurse down the tree
-		count += printNeighborsHelp(lat, lon, rad, filter, p->left);
-	}
 	//if even depth
 	else if(p->depth % 2){
 		//check latitude
@@ -161,6 +144,21 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 			//call recursivly left and update count
 			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
 		
+		}
+		else if(p->distance(lat, lon) <= rad){
+		
+			//checks if filter keyword is in the description of the node
+			if(p->description.find(filter) != std::string::npos){
+				//if so, prints node	
+				printNode(p);
+				//increment the count
+				count++;
+		
+			}
+			//recurse down the tree
+			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
+			//recurse down the tree
+			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
 		}
 		else{
 			//p latitude is in the range, then call resursivley right and left
@@ -182,6 +180,21 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 			//updat count, call the function recurse right
 			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
 		
+		}
+		else if(p->distance(lat, lon) <= rad){
+		
+			//checks if filter keyword is in the description of the node
+			if(p->description.find(filter) != std::string::npos){
+				//if so, prints node	
+				printNode(p);
+				//increment the count
+				count++;
+		
+			}
+			//recurse down the tree
+			count += printNeighborsHelp(lat, lon, rad, filter, p->right);
+			//recurse down the tree
+			count += printNeighborsHelp(lat, lon, rad, filter, p->left);
 		}
 		else{
 			//if the longitude is in the range, call both left and right recursivly.

@@ -83,7 +83,7 @@ void KDTree::insert(double lat, double lon, const char *desc) {
 }
 
 void KDTree::printNode(KDNode *p){
-	
+	str.erase(str.find_last_not_of(" \n\r\t")+1);
 	std::cout << "\t[\"" << p->description << "\", " << p->latitude << ", " << p->longitude << "],\n";
 	
 }

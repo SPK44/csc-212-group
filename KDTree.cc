@@ -107,7 +107,7 @@ unsigned int KDTree::printNeighborsHelp(double lat, double lon, double rad, cons
 		count += printNeighborsHelp(lat, lon, rad, filter, p->right);
 		count += printNeighborsHelp(lat, lon, rad, filter, p->left);
 	}
-	else if(!(p->depth % 2)){
+	else if(p->depth % 2){
 		
 		if( p->latitude > lat + (rad/69.172)){
 		
